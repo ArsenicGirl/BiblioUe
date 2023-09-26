@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login BiblioUe</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles/index.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+
+            <img  src="../assets/logo-ue.svg" alt="logo" class="header-icon">
+      
+        </div>
+    </nav>
+
+   <main>
+    <div class="container">
+
+        <div class="back_box">
+            <div class="backBox_login">
+
+                <h2 class="title is-5 has-text-white">¿Tienes una cuenta?</h2>
+                <p>Inicia sesión</p>
+                <input class="button is-link "id="btn_login_form" type="submit" value="Ingresar">
+            </div>
+            <div class="backBox_register">
+
+                <h2 class="title is-5 has-text-white">¿No tienes una cuenta?</h2>
+                <p>Ingresa tus datos como estudiante o admistrador y 
+                    <br> registrate.</p>
+                <input class="button is-link" id="btn_register_form" type="submit" value="Registrarse">
+            </div>
+        </div>
+         <!--estructura de los formularios, se usa el action /validar porque así decidí llamar a la acción-->
+        <div class="container_login_register">
+
+            <form action="/validar" method="post" class="login-form">
+                <h2 class="title is-4 has-text-link">Inicia sesión</h2>
+            <div class="field">
+                <label class="label">Correo</label>
+                <div class="control">
+                    <input class="input" type="email" placeholder="Correo institucional">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Contraseña</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Ingrese su contraseña">
+                </div>
+            </div>
+
+            <input id="btn_validar" class="button is-link has-background-link-dark" type="submit" value="Iniciar sesión">
+
+            </form> 
+       
+            <form action="/registrar" method="post" class="register-form">
+         
+                <h2 class="title is-4 has-text-link">Registrate</h2>
+                <div class="field">
+                    <label class="label">Nombre y apellidos</label>
+                    <div class="control">
+                        <input class="input" type="text" id="name" placeholder="Nombre completo">
+                    </div>
+                    <div class="field">
+                        <label class="label">Correo</label>
+                        <div class="control">
+                            <input class="input" type="email" placeholder="Correo institucional">
+                        </div>
+                    </div>
+
+                </div>
+
+            <div class="field">
+                <label class="label">Número de identificación</label>
+                <div class="control">
+                    <input class="input" type="number"  min="100000000" max="9999999999" placeholder="Número de identificación de su carnet">
+                </div>
+
+           <div class="field">
+                <label class="label">Contraseña</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Ingrese su contraseña">
+                </div>
+            </div>
+            
+            <input id="btn-registrar" class="button is-link has-background-link-dark" type="submit" value="Registrarse"><br> <br>
+        </form>
+        </div>
+    </div>
+    </main>
+   <script src="/scripts/loginRegister.js"></script> 
+</body>
+</html>

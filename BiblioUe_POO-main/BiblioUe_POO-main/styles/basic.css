@@ -1,0 +1,64 @@
+/*general del header*/
+.header{
+    z-index: 50; /*para manejar la capa, entre menor sea el numero mas atras de las capas está*/
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0PX;
+}
+
+.nav-header{
+    display: flex;
+    justify-content: space-between;
+    padding:8px;
+    max-width: 990PX;
+    margin: 0 auto;
+}
+
+.header-icon{
+    width: 60%;
+    display: flex;
+    min-width: 80px;
+}
+
+
+/*Menu*/
+a{
+    text-decoration: none;
+}
+
+.menu{
+    display: flex;
+    list-style: none;
+    margin:10px 0px 0px 0px;
+    padding: 0;
+}
+
+.menu li{
+    color:white;
+    font-family: var(--word-font);
+    padding: 18px 15px 15px 15px;
+    font-size: 100%;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.menu li::before{
+    content: "";
+    background-color: #db2434;
+    position:absolute;
+    top: 66%;
+    width: 9%;
+    height: 2px;
+    opacity: 0;
+}
+
+
+/*.menu a.select1::after,*/
+.menu li:hover::before{
+    cursor: pointer;
+    opacity: 0.8;
+ 
+}

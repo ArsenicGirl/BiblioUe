@@ -1,0 +1,85 @@
+body{
+     background-image: linear-gradient(transparent, rgb(199, 191, 235));
+    background-size: cover;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh; /* Añadido para asegurar una altura completa del viewport */
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+main{
+    width: 100%;
+    padding: 20px;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.container{
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+}
+
+.back_box{
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    background-color: rgb(177, 162, 241);
+}
+
+.back_box div{
+    margin: 100px 40px;
+    color: white;
+    transition: all 500ms;
+}
+
+
+.back_box div p,
+.back_box div button{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-right: 20px;
+}
+
+.backBox_register {
+    padding-left: 150px;
+}
+/*Formulatios*/
+
+.container_login_register{
+    display: flex;
+    align-items: center;
+    max-width: 380px;
+    position: relative;
+    top: -190px;
+    left: 15px;
+    transition: left 0.3s ease-in-out;
+}
+.container_login_register form{
+    width: 100%;
+    padding: 80px 20px;
+    background: white;
+    position: absolute;
+    border-radius: 10px;
+}
+
+.login-form{
+    opacity: 1;
+    display: block;
+    box-shadow: 5px 14px 8px #00000042;
+}
+
+.register-form{
+    display: none;
+    box-shadow: 5px 14px 8px #00000042;
+}
+
+/*Responsive*/
+

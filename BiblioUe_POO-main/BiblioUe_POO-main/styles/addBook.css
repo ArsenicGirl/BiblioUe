@@ -1,0 +1,10 @@
+.register-form-books form{
+    width: 90%;
+    padding: 40px 20px;
+    left: 200px;
+}
+
+table thead {
+    background-color: #0d1e7e;
+    color: white;
+}

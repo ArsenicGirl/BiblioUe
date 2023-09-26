@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar libros - administrador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="/styles/addBook.css">
+    <link rel="stylesheet" href="/styles/basic.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+
+    <!-- Header y menú -->
+    <header class="header">
+        <nav class="nav-header">
+            <!-- Logo del Laboratorio de Innovación Social -->
+            <a href="#" class="header-logo">
+                <img  src="/assets/logo-ue.svg" alt="logo" class="header-icon">
+            </a>
+            <!-- Lista del menú -->
+            <div>
+            <ul class="menu">
+                <li><a class="is-size-6 has-text-danger" href="#">Estudiantes</a></li>
+            </ul>
+            </div>
+        </nav>
+    </header><br><br><br><br><br>
+
+    <div class="container">
+    <!--CRUD-->
+    <div id="register-books" class="columns">
+      <div class="column is-6">
+        <div class="register-form-books">
+        <div class="block">
+        <form  id="addBook_form" class="box">
+            <h2 class="title is-4"> <strong>Añadir un libro</strong></h2>
+            <div class="field">
+              <label class="label">Titulo</label>
+              <div class="control">
+                <input class="input" id="titulo" type="text" placeholder="ejm. 100 años de soledad">
+              </div>
+            </div>
+          
+            <div class="field">
+              <label class="label">Autor</label>
+              <div class="control">
+                <input class="input" id="autor" type="text" placeholder="ejm. Gabriel García Marquez">
+              </div>
+            </div>
+
+            <label class="label">Cetegoría</label>
+            <div class="select" for="rol" >
+                <select id="categoria">
+                  <option value="nada" select="selected">-</option>
+                  <option value="1">Ficción</option>
+                  <option value="1">No ficción</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="label">Año de publicación</label>
+                <div class="control">
+                  <input class="input" id="fecha" type="number" min="1400" max="2024" placeholder="Escriba el año">
+                </div>
+              </div>
+              
+        <div class="field">
+            <label class="label">Descripción</label>
+            <textarea class="textarea " id="desc" placeholder="Escriba una breve descripción del libro"></textarea>
+          </div>
+
+              <input class="btnCrear button is-link" type="submit" value="Crear"/><br> <br>
+            </form>
+        </div>
+        </div>
+      </div>
+
+      <hr>
+      <!--Tabla de libros agregados-->
+      <div class="book-list mt-4 shadow-lg p-3 mb-5 bg-body is-rounded">
+      <table class="table is-bordered is-striped">
+        <thead>
+          <tr class="has-background-link">
+            
+            <th class="has-text-white">Titulo</th>
+            <th class="has-text-white">Autor</th>
+            <th class="has-text-white">Categoría</th>
+            <th class="has-text-white">Fecha</th>
+            <th class="has-text-white">Descripción</th>
+          </tr>
+        </thead>
+          <tbody>
+
+          </tbody>
+      </table>
+        </div>
+
+           
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+
+const url ='http://localhost:3000/api/book'
+const contenedor = document.querySelector ('tbody')
+let results = ''
+const formArticulos = document.querySelector('form')  
+const book_title = document.getElementById('titulo')
+const book_author = document.getElementById('autor')
+const book_category = document.getElementById('categoria')
+const book_publishYear= document.getElementById('fecha')
+const book_description = document.getElementById('desc')
+let opcion = ''
+
+
+const save = async (data) =>{
+  await axios({
+    method: 'post',
+    url: 'http://localhost:3000/api/book',
+    data: data
+  }).then(d=>{
+    console.log(d)
+  }).catch(e=>console.warn(e))
+}
+//eliminar los datos del formularoi cuando se cree un registro
+formArticulos.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  let data = {
+    book_title: book_title.value,
+    book_description: book_description.value,
+    book_author: book_author.value ,
+    book_publishYear: parseInt(book_publishYear.value),
+    cate_id: parseInt(book_category.value)
+  }
+  console.log(data)
+  save(data)
+  book_title.value = ''
+  book_author.value = ''
+  book_category.value = ''
+  book_publishYear.value = ''
+  book_description.value = ''
+  opcion = cleanForm(document.getElementById("addBook_form").reset())
+
+})
+
+
+//funcion para mostrar los datos
+const mostrar = (books) => {
+        books.forEach((book) => {
+            results += `
+                <tr>
+                    <td>${book.book_id}</td>
+                    <td>${book.book_title}</td>
+                    <td>${book.book_author}</td>
+                    <td>${book.book_category}</td>
+                    <td>${book.book_publishYear}</td>
+                    <td>${book.book_description}</td>
+                    <td class="text-center">
+                        <a class="btn-edit button is-danger is-light">Editar</a>
+                        <a class="btn-delete button is-success is-light">Eliminar</a>
+                    </td>
+                </tr>
+            `;
+        });
+        contenedor.innerHTML = results;
+    };
+
+//meotdo para mostrar los datos (la url se definió arriba: 'http://localhost:3000/api/book )
+fetch(url)
+  .then(response => response.json())
+  .then(data => mostrar(data))
+  .catch(error => console.log(error))
+
+
+  
+    </script>
+</body>
+</html>
