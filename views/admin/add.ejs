@@ -34,6 +34,7 @@
       <div class="column is-6">
         <div class="register-form-books">
         <div class="block">
+
         <form  id="addBook_form" class="box">
             <h2 class="title is-4"> <strong>Añadir un libro</strong></h2>
             <div class="field">
@@ -84,11 +85,13 @@
         <thead>
           <tr class="has-background-link">
             
+            <th class="has-text-white">Id</th>
             <th class="has-text-white">Titulo</th>
             <th class="has-text-white">Autor</th>
             <th class="has-text-white">Categoría</th>
             <th class="has-text-white">Fecha</th>
             <th class="has-text-white">Descripción</th>
+            <th class="has-text-white"> </th>
           </tr>
         </thead>
           <tbody>
@@ -158,8 +161,8 @@ const mostrar = (books) => {
                     <td>${book.book_publishYear}</td>
                     <td>${book.book_description}</td>
                     <td class="text-center">
-                        <a class="btn-edit button is-danger is-light">Editar</a>
-                        <a class="btn-delete button is-success is-light">Eliminar</a>
+                        <a class="btn-edit button is-success is-light">Editar</a>
+                        <a class="btn-delete button is-danger is-light">Eliminar</a>
                     </td>
                 </tr>
             `;
