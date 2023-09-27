@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login BiblioUe</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/styles/index.css">
+    <link rel="stylesheet" type="text/css" href="resources/styles/index.css">
 </head>
 <body>
 
     <nav>
         <div class="logo">
 
-            <img  src="../assets/logo-ue.svg" alt="logo" class="header-icon">
+            <img  src="resources/assets/logo-ue.svg" alt="logo" class="header-icon">
       
         </div>
     </nav>
@@ -41,15 +41,15 @@
             <form id="login_form" class="login-form">
                 <h2 class="title is-4 has-text-link">Inicia sesión</h2>
             <div class="field">
-                <label class="label" for="login-email">Correo</label>
+                <label class="label" for="loginEmail">Correo</label>
                 <div class="control">
-                    <input class="input" type="email" id="login-email" placeholder="Correo institucional">
+                    <input class="input" type="email" name="loginEmail" id="loginEmail" placeholder="Correo institucional">
                 </div>
             </div>
             <div class="field">
-                <label class="label" for="login-password">Contraseña</label>
+                <label class="label" for="loginPassword">Contraseña</label>
                 <div class="control">
-                    <input class="input" type="text" id="login-password" placeholder="Ingrese su contraseña">
+                    <input class="input" type="text" id="loginPassword" name="loginPassword" placeholder="Ingrese su contraseña">
                 </div>
             </div>
 
@@ -97,6 +97,8 @@
         </div>
     </div>
     </main>
+    <script src="resources/scripts/loginRegister.js"></script> 
+
     <!--envio de info registro-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -146,10 +148,40 @@
 });
 
 
+
+//login
+const url2 = 'http://localhost:3000/auth'; // Cambia la URL a la de tu API de inicio de sesión
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+
+    const save2 = async (data) =>{
+    await axios({
+        method: 'post',
+        url: 'http://localhost:3000/api/student',
+        data: data
+    }).then(d=>{
+        console.log(d)
+    }).catch(e=>console.warn(e))
+    }
+
+    login_form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        let data = {
+        stud_email: loginEmail.value,
+        stud_password: loginPassword.value  
+    };
+    alert(':D');
+
     
+    });
+
+
+
     </script>
 
-<!--script para el login-->
+    
+
+<!--script para el login-
 <script>
 
     const url2 = 'http://localhost:3000/api/student'; // Reemplaza con la URL correcta de tu API de inicio de sesión
@@ -183,7 +215,7 @@
     });
 
     </script>
+-->
 
- <!--  <script src="/scripts/loginRegister.js"></script> -->
 </body>
 </html>

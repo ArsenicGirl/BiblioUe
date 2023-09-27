@@ -6,7 +6,7 @@
     <title>Registrar libros - administrador</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="/styles/addBook.css">
-    <link rel="stylesheet" href="/styles/basic.css">
+    <link rel="stylesheet" href="resources/styles/basic.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
@@ -17,13 +17,13 @@
         <nav class="nav-header">
             <!-- Logo del Laboratorio de Innovación Social -->
             <a href="#" class="header-logo">
-                <img  src="/assets/logo-ue.svg" alt="logo" class="header-icon">
+                <img  src="resources/assets/logo-ue.svg" alt="logo" class="header-icon">
             </a>
             <!-- Lista del menú -->
             <div>
-            <ul class="menu">
-                <li><a class="is-size-6 has-text-danger" href="#">Estudiantes</a></li>
-            </ul>
+              <a href="#" class="header-logo">
+                <img  src="resources/assets/iconfinder_user_circle_duotone_9022927.svg" alt="logo" class="avatar-icon">
+            </a>
             </div>
         </nav>
     </header><br><br><br><br><br>
@@ -127,6 +127,8 @@ const save = async (data) =>{
     console.log(d)
   }).catch(e=>console.warn(e))
 }
+
+
 //eliminar los datos del formularoi cuando se cree un registro
 formArticulos.addEventListener('submit',(e)=>{
   e.preventDefault();
@@ -161,8 +163,8 @@ const mostrar = (books) => {
                     <td>${book.book_publishYear}</td>
                     <td>${book.book_description}</td>
                     <td class="text-center">
-                        <a class="btn-edit button is-success is-light">Editar</a>
-                        <a class="btn-delete button is-danger is-light">Eliminar</a>
+                        <a class="btnEdit button is-success is-light">Editar</a>
+                        <a class="btnDelete button is-danger is-light">Eliminar</a>
                     </td>
                 </tr>
             `;
@@ -170,11 +172,36 @@ const mostrar = (books) => {
         contenedor.innerHTML = results;
     };
 
-//meotdo para mostrar los datos (la url se definió arriba: 'http://localhost:3000/api/book )
-fetch(url)
-  .then(response => response.json())
-  .then(data => mostrar(data))
-  .catch(error => console.log(error))
+
+axios.get(url)
+  .then(response => {
+    const data = response.data;
+    mostrar(data);
+  })
+  .catch(error => console.log(error));
+
+const on = (element, event, selector, handler) => {
+  element.addEventListener(event, e => {
+    const target = e.target.closest(selector);
+    if (target) {
+      handler(e, target);
+    }
+  });
+};
+
+on(document, 'click', '.btnDelete', (e, target) => {
+  const fila = target.parentNode.parentNode;
+  const id = fila.firstElementChild.innerHTML;
+  alertify.confirm('Confirm Message', 
+  function(){ 
+    axios(url+id, {
+      method: 'delete'
+    }) 
+    .then(res => res.json())
+    .then(()=> location.reload())
+  }, 
+  function(){ alertify.error('Cancel')});
+});
 
 
   

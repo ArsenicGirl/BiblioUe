@@ -4,6 +4,7 @@ const mysql = require("mysql");
 //const mysqlConexion = require ("./conexion");
 const cors = require ('cors');
 const { json } = require ('express');
+const session = require('express-session');
 const database = require("mime-db");
 
 //crear el objeto para llamar los metodos de express
@@ -15,6 +16,9 @@ app.use(express.json());
 
 //app.use(express.static('styles'));
 app.use(cors());
+
+const dotenv = require('dotenv');
+dotenv.config({path: './env/.env'});
 
 //estableceer parametros de concexion ala base de datos
 const connection = mysql.createConnection({
@@ -36,35 +40,94 @@ connection.connect(function(error){
     }
 })
 
+//todo lo que sea recursos, son mis archivos de estilo en public
+app.use('/resources', express.static('public'));
+app.use('/resources', express.static(__dirname + '/public'));
+
+//invocar al bcryptjs
+const bcryptjs = require('bcryptjs');
+
+//variables de session
+app.use(session({
+    secret:'secret',
+    resave: true,
+    saveUnitialized: true
+}))
+
+
+
 //links a las paginas para usar en los botones y linkearlas entre sí
+
+//**INDEX**/
 app.get("/", function(req,res){
     res.render(__dirname + '/views/index.ejs')
 })
-/*
-app.post("/registrar", function(req,res){
-    const datos = req.body;
-    
-    console.log(datos);
-})*/
 
 //**USERS**
 app.get("/library", function(req, res) {
-    res.render(__dirname + '/views/user/library.html'); 
+    res.render(__dirname + '/views/user/library.ejs'); 
 });
+
+app.get("/studentProfile", function(req,res){
+    res.render(__dirname + '/views/user/userProfile.ejs')
+})
 
 //**ADMIN** 
 app.get("/addBook", function(req,res){
     res.render(__dirname + '/views/admin/add.ejs')
 })
 app.get("/indexAdmin", function(req,res){
-    res.render(__dirname + '/views/admin/indexAdmin.html')
+    res.render(__dirname + '/views/admin/indexAdmin.ejs')
 })
+app.get("/studentList", function(req,res){
+    res.render(__dirname + '/views/admin/studentsList.ejs')
+})
+
+
 
 
 //Motor de vistas (para que se vean los estilos y así
 app.set("view engine", "ejs");
 
 
+//autenticacion login
+
+app.post('/auth', async (req, res) => {
+    const loginEmail = req.body.loginEmail;
+    const loginPassword = req.body.loginPassword;
+
+    if (loginEmail && loginPassword) {
+        connection.query('SELECT * FROM student WHERE stud_email = ?', [loginEmail], async (error, results) => {
+            if (error) {
+                console.error('Error en la consulta SQL:', error);
+                res.status(500).json({ message: 'Error interno del servidor' });
+            } else if (results.length === 0) {  
+                res.status(401).json({ message: 'Correo electrónico incorrecto' });
+            } else {
+                const storedPassword = results[0].loginPassword;
+
+                // Utiliza bcryptjs.compare para comparar la contraseña proporcionada con el hash almacenado
+                bcryptjs.compare(loginPassword, storedPassword, async (err, passwordMatch) => {
+                    if (err) {
+                        console.error('Error al comparar contraseñas:', err);
+                        res.status(500).json({ message: 'Error interno del servidor' });
+                    } else if (passwordMatch) {
+                        // Las contraseñas coinciden, el inicio de sesión es exitoso
+                        res.status(200).json({ message: 'Inicio de sesión exitoso' });
+                    } else {
+                        res.status(401).json({ message: 'Contraseña incorrecta' });
+                    }
+                });
+            }
+        });
+    } else {
+        res.status(400).json({ message: 'Datos de inicio de sesión incompletos' });
+    }
+});
+
+
+
+//consultas
 /********TABLA STUDENT***********/
 // Ruta para obtener y mostrar datos de una tabla
 app.get("/api/student", function(req, res) {

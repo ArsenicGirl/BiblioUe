@@ -1,0 +1,14 @@
+.avatar{
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 10px solid #b3661eb0;
+    background-color: rgb(253, 246, 232);
+    border-radius: 50%;
+    position: absolute;
+    bottom: -1px;
+    left: calc(50% - 90px);
+    box-shadow: 0 0 15px #0000005b;
+}

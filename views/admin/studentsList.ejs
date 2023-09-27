@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar libros - administrador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="resources/styles/basic.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.10/css/jquery.dataTables.min.css">
+    <script src="resources/class/studentsDataTable.js"></script> 
+
+</head>
+<body>
+
+    <div class="container is-widescreen">
+    <!-- Header y menú -->
+    <header class="header">
+        <nav class="nav-header">
+            <!-- Logo del Laboratorio de Innovación Social -->
+            <a href="#" class="header-logo">
+                <img  src="resources/assets/logo-ue.svg" alt="logo" class="header-icon">
+            </a>
+            <!-- Lista del menú -->
+            <div>
+            <ul class="menu">
+                <li><a class="is-size-6 has-text-danger" href="#">Estudiantes</a></li>
+            </ul>
+            </div>
+        </nav>
+    </header><br><br><br><br><br>
+
+    <div class="book-list mt-4 shadow-lg p-3 mb-5 bg-body is-rounded">
+        <div class="columns is-centered">
+            <div class="column is-10">
+                <div class="box mt-4 shadow-lg p-3 mb-5 bg-body is-rounded">
+                   
+        <table id="dataTable" class="table is-bordered is-striped">
+          <thead>
+            <tr class="has-background-link">
+              
+              <th class="has-text-white">Id</th>
+              <th class="has-text-white">Nombre(s)</th>
+              <th class="has-text-white">Apellidos</th>
+              <th class="has-text-white">Correo</th>
+              <th class="has-text-white">Contraseña</th>
+              <th class="has-text-white">Identificación</th>
+              <th class="has-text-white">  </th>
+            </tr>
+          </thead>
+            <tbody>
+  
+            </tbody>
+        </table>
+       </div>
+       </div>
+       </div>
+       </div>
+    </div>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>$(document).ready(function() {
+    $('dataTable').DataTable();
+    });
+    </script>
+
+    <script>
+    const contenedor = document.querySelector('tbody'); // Asegúrate de que el contenedor esté definido
+let results = ''; // Inicializa la variable 'results'
+
+const cargarDatos = async () => {
+    try {
+        const response = await axios.get('http://localhost:3000/api/student');
+        const students = response.data; // Asegúrate de que los datos se obtengan correctamente aquí
+        console.log(students); // Imprime los datos en la consola para verificar
+        mostrar(students);
+    } catch (error) {
+        console.error('Error al obtener datos:', error);
+    }
+};
+
+const mostrar = (students) => {
+    results = ''; // Inicializa 'results' antes de concatenar datos
+    students.forEach((student) => {
+        results += `
+            <tr>
+                <td>${student.stud_id}</td>
+                <td>${student.stud_firstName}</td>
+                <td>${student.stud_lastName}</td>
+                <td>${student.stud_email}</td>
+                <td>${student.stud_password}</td>
+                <td>${student.stud_carnet}</td>
+                <td class="text-center">
+                        <a class="btn-edit button is-success is-light">Editar</a>
+                        <a class="btn-delete button is-danger is-light">Eliminar</a>
+                </td>
+            </tr>
+        `;
+    });
+    contenedor.innerHTML = results; // Asegúrate de que 'contenedor' se actualice con 'results'
+};
+
+// Llama a la función para cargar los datos y actualizar la tabla cuando se carga la página
+cargarDatos();
+
+    </script>
+
+    
+
+</body>
+</html>

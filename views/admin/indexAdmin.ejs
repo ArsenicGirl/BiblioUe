@@ -4,20 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="/styles/indexAdmin.css">
+    <link rel="stylesheet" href="resources/styles/basic.css">
     <title>Pagina inicial></title>
 </head>
 <body>
+     <!-- Header y menú -->
+     <header class="header">
+        <nav class="nav-header">
+            <!-- Logo del Laboratorio de Innovación Social -->
+            <a href="#" class="header-logo">
+                <img  src="resources/assets/logo-ue.svg" alt="logo" class="header-icon">
+            </a>
+            <!-- Lista del menú -->
+            <div>
+            <ul class="menu">
+                <li><a class="is-size-6 has-text-danger" href="#">Estudiantes</a></li>
+            </ul>
+            </div>
+        
+        </nav>
+    </header><br><br><br><br><br>
     <section class="section">
         <div class="container">
             <div class="columns is-centered">
                 <!-- Panel de Estudiantes -->
                 <div class="column is-one-quarter">
-                    <a href="pagina_estudiantes.html">
+                    <a href="/studentList">
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">
-                                    <img src="/assets/estudiante-libros-papeleria.jpg" alt="Estudiantes">
+                                    <img src="resources/assets/estudiante-libros-papeleria.jpg" alt="Estudiantes">
                                 </figure>
                             </div>
                             <div class="card-content">
@@ -31,11 +47,11 @@
 
                 <!-- Panel de Agregar Libros -->
                 <div class="column is-one-quarter">
-                    <a href="./addBook.html">
+                    <a href="/addBook">
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">
-                                    <img src="/assets/composicion-vista-frontal-diferentes-libros.jpg" alt="Libros">
+                                    <img src="resources/assets/composicion-vista-frontal-diferentes-libros.jpg" alt="Libros">
                                 </figure>
                             </div>
                             <div class="card-content">
@@ -51,11 +67,11 @@
             <div class="columns is-centered">
                 <!-- Panel de Administrar multas -->
                 <div class="column is-one-quarter">
-                    <a href="pagina_administrar_estudiantes.html">
+                    <a href="pagina_administrar_multas.html">
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">
-                                    <img src="ruta_de_la_imagen_administrar_estudiantes.jpg" alt="Administrar Estudiantes">
+                                    <img src="resources/assets/pena-multa-juicios-rapidos.jpg" alt="Administrar Estudiantes">
                                 </figure>
                             </div>
                             <div class="card-content">
@@ -73,7 +89,7 @@
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">
-                                    <img src="/assets/colegas-leyendo-usando-computadora-portatil-sesion-estudio.jpg" alt="Gestionar Administradores">
+                                    <img src="resources/assets/colegas-leyendo-usando-computadora-portatil-sesion-estudio.jpg" alt="Gestionar Administradores">
                                 </figure>
                             </div>
                             <div class="card-content">
