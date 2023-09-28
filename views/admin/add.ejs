@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar libros - administrador</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="/styles/addBook.css">
+    <link rel="stylesheet" href="resources/styles/addBook.css">
     <link rel="stylesheet" href="resources/styles/basic.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-</head>
+</head>s
 <body>
 
     <!-- Header y menú -->
@@ -37,20 +41,20 @@
         <form  id="addBook_form" class="box">
             <h2 class="title is-4"> <strong>Añadir un libro</strong></h2>
             <div class="field">
-              <label class="label">Titulo</label>
+              <label class="label" for="titulo">Titulo</label>
               <div class="control">
                 <input class="input" id="titulo" type="text" placeholder="ejm. 100 años de soledad">
               </div>
             </div>
           
             <div class="field">
-              <label class="label">Autor</label>
+              <label class="label" for="autor">Autor</label>
               <div class="control">
                 <input class="input" id="autor" type="text" placeholder="ejm. Gabriel García Marquez">
               </div>
             </div>
 
-            <label class="label">Cetegoría</label>
+            <label class="label" for="categoria">Cetegoría</label>
             <div class="select" for="rol" >
                 <select id="categoria">
                   <option value="nada" select="selected">-</option>
@@ -60,14 +64,14 @@
               </div>
 
               <div class="field">
-                <label class="label">Año de publicación</label>
+                <label class="label" for="fecha">Año de publicación</label>
                 <div class="control">
                   <input class="input" id="fecha" type="number" min="1400" max="2024" placeholder="Escriba el año">
                 </div>
               </div>
               
         <div class="field">
-            <label class="label">Descripción</label>
+            <label class="label" for="desc">Descripción</label>
             <textarea class="textarea " id="desc" placeholder="Escriba una breve descripción del libro"></textarea>
           </div>
 
@@ -98,80 +102,141 @@
           </tbody>
       </table>
         </div>
+    </div>
+    </div>
+    <canvas id="BarChart" width="4" height="1" aria-label="chart" role="img"></canvas>
 
-           
-    </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
 
-const url ='http://localhost:3000/api/book'
-const contenedor = document.querySelector ('tbody')
-let results = ''
-const formArticulos = document.querySelector('form')  
-const book_title = document.getElementById('titulo')
-const book_author = document.getElementById('autor')
-const book_category = document.getElementById('categoria')
-const book_publishYear= document.getElementById('fecha')
-const book_description = document.getElementById('desc')
-let opcion = ''
+const url ='http://localhost:3000/api/book';
+const contenedor = document.querySelector ('tbody');
+let results = '';
+const formArticulos = document.querySelector('form');
+const book_title = document.getElementById('titulo');
+const book_author = document.getElementById('autor');
+const book_category = document.getElementById('categoria');
+const book_publishYear = document.getElementById('fecha');
+const book_description = document.getElementById('desc');
+let opcion = '';
 
+const save = async (data) => {
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'http://localhost:3000/api/book',
+      data: data
+    });
+    console.log(response);
+    // Mostrar alerta de éxito
+    mostrarAlerta("Libro registrado satisfactoriamente", "is-success");
+  } catch (error) {
+    console.warn(error);
+  }
+};
 
-const save = async (data) =>{
-  await axios({
-    method: 'post',
-    url: 'http://localhost:3000/api/book',
-    data: data
-  }).then(d=>{
-    console.log(d)
-  }).catch(e=>console.warn(e))
-}
-
-
-//eliminar los datos del formularoi cuando se cree un registro
-formArticulos.addEventListener('submit',(e)=>{
+// Eliminar los datos del formulario cuando se cree un registro
+formArticulos.addEventListener('submit', async (e) => {
   e.preventDefault();
   let data = {
     book_title: book_title.value,
     book_description: book_description.value,
-    book_author: book_author.value ,
+    book_author: book_author.value,
     book_publishYear: parseInt(book_publishYear.value),
     cate_id: parseInt(book_category.value)
-  }
-  console.log(data)
-  save(data)
-  book_title.value = ''
-  book_author.value = ''
-  book_category.value = ''
-  book_publishYear.value = ''
-  book_description.value = ''
-  opcion = cleanForm(document.getElementById("addBook_form").reset())
+  };
 
-})
+  console.log(data);
+  await save(data);
+  // Restablecer el formulario
+  formArticulos.reset();
+  opcion = cleanForm(document.getElementById("addBook_form").reset());
+});
 
+// Función para mostrar una alerta de Bulma
+function mostrarAlerta(mensaje, estilo) {
+  const div = document.createElement("div");
+  div.className = `notification ${estilo}`;
+  div.appendChild(document.createTextNode(mensaje));
 
-//funcion para mostrar los datos
+  // Insertar la alerta antes del formulario
+  formArticulos.parentNode.insertBefore(div, formArticulos);
+
+  // Eliminar la alerta después de 3 segundos
+  setTimeout(() => {
+    div.remove();
+  }, 3000);
+}
+
+// ...
+
+// Función para mostrar los datos
 const mostrar = (books) => {
-        books.forEach((book) => {
-            results += `
-                <tr>
-                    <td>${book.book_id}</td>
-                    <td>${book.book_title}</td>
-                    <td>${book.book_author}</td>
-                    <td>${book.book_category}</td>
-                    <td>${book.book_publishYear}</td>
-                    <td>${book.book_description}</td>
-                    <td class="text-center">
-                        <a class="btnEdit button is-success is-light">Editar</a>
-                        <a class="btnDelete button is-danger is-light">Eliminar</a>
-                    </td>
-                </tr>
-            `;
+  books.forEach((book) => {
+    results += `
+      <tr>
+        <td>${book.book_id}</td>
+        <td>${book.book_title}</td>
+        <td>${book.book_author}</td>
+        <td>${book.book_category}</td>
+        <td>${book.book_publishYear}</td>
+        <td>${book.book_description}</td>
+        <td class="text-center">
+          <a class="btn-edit button is-success is-light">Editar</a>
+          <a class="btn-delete button is-danger is-light">Eliminar</a>
+        </td>
+      </tr>
+    `;
+  });
+  contenedor.innerHTML = results;
+};
+
+
+
+    //delete
+
+const url2 ='http://localhost:3000/api/book'
+    fetch(url2)
+  .then(response => response.json())
+  .then(data => mostrar(data))
+  .catch(error => console.log(error));
+
+const on = (element, event, selector, handler) => {
+  element.addEventListener(event, e => {
+    if (e.target.closest(selector)) {
+      handler(e);
+    }
+  });
+};
+
+on(document, 'click', '.btn-delete', e => {
+  const target = e.target;
+  const fila = target.parentNode.parentNode;
+  const id = fila.firstElementChild.innerHTML;
+  alertify.confirm('Confirm Message',
+    function () {
+      fetch(url2 + id, {
+        method: 'DELETE'
+      })
+        .then(res => {
+          if (res.ok) {
+            fila.remove(); // Elimina la fila de la tabla en la interfaz de usuario
+          } else {
+            console.error('Error al eliminar:', res.status, res.statusText);
+          }
+        })
+        .catch(error => {
+          console.error('Error al eliminar:', error);
         });
-        contenedor.innerHTML = results;
-    };
+    },
+    function () {
+      alertify.error('Cancel');
+    });
+});
 
 
+    /*
 axios.get(url)
   .then(response => {
     const data = response.data;
@@ -188,22 +253,168 @@ const on = (element, event, selector, handler) => {
   });
 };
 
-on(document, 'click', '.btnDelete', (e, target) => {
+on(document, 'click', '.btn-delete', (e, target) => {
   const fila = target.parentNode.parentNode;
   const id = fila.firstElementChild.innerHTML;
-  alertify.confirm('Confirm Message', 
-  function(){ 
-    axios(url+id, {
-      method: 'delete'
-    }) 
-    .then(res => res.json())
-    .then(()=> location.reload())
-  }, 
-  function(){ alertify.error('Cancel')});
-});
-
-
+ alertify.confirm('Confirm Message', 
+  function() { 
+      axios.delete(url + id)
+        .then(() => {
+          // Eliminación exitosa
+          fila.remove(); // Elimina la fila de la tabla en la interfaz de usuario
+        })
+        .catch(error => {
+          console.error('Error al eliminar:', error);
+        });
+    },
+    function() { 
+      alertify.success('Cancel');
+    }
+  );
+});*/
   
     </script>
+
+<!--grafica-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+
+<script>
+   var ctx = document.getElementById('BarChart'); // Cambia 'crx' a 'ctx'
+var BarChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+       //labels: [], //  las etiquetas (categorías)
+        datasets: [{
+            label: 'Cantidad de libros según el año de públicación',
+           // data: [9], // los datos (cantidad de libros)
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)'],
+            borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)','rgb(255, 205, 86)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+let url3 = 'http://localhost:3000/api/book';
+
+fetch(url3)
+    .then(response => response.json())
+    .then(datos => ejecutar(datos)) // Cambia 'mosttar' a 'ejecutar'
+    .catch(error => console.log(error));
+
+const ejecutar = (data) => {
+    // Crear un objeto para almacenar los recuentos por año
+    const yearCounts = {};
+
+    data.forEach(element => {
+        const year = element.book_publishYear; // Usar el nombre correcto del campo
+        if (yearCounts[year]) {
+            yearCounts[year]++;
+        } else {
+            yearCounts[year] = 1;
+        }
+    });
+
+    // Obtener las etiquetas (años) y datos (cantidad de libros por año)
+    const years = Object.keys(yearCounts).sort();
+    const bookCounts = years.map(year => yearCounts[year]);
+
+    // Actualizar el gráfico
+    BarChart.data.labels = years;
+    BarChart.data.datasets[0].data = bookCounts;
+    BarChart.update();
+}
+
+
+/*
+    'use strict'
+
+    const labels = ['2017','2018','2019','2020','2021','2022','2023'];
+
+    console.log(document.getElementById('BarChart'))
+
+    const data = {
+
+        labels: labels,
+
+        datasets: [{
+
+            label: 'Tasa de mortalidad por suicidios anuales',
+
+            data: [100000, 20000, 500000, 80000, 5600, 55000, 400000],
+
+            backgroundColor: [
+
+            'rgba(255, 99, 132, 0.2)',
+
+            'rgba(255, 159, 64, 0.2)',
+
+            'rgba(255, 205, 86, 0.2)',
+
+            'rgba(75, 192, 192, 0.2)',
+
+            'rgba(54, 162, 235, 0.2)',
+
+            'rgba(153, 102, 255, 0.2)',
+
+            'rgba(201, 203, 207, 0.2)'
+
+            ],
+
+            borderColor: [
+
+            'rgb(255, 99, 132)',
+
+            'rgb(255, 159, 64)',
+
+            'rgb(255, 205, 86)',
+
+            'rgb(75, 192, 192)',
+
+            'rgb(54, 162, 235)',
+
+            'rgb(153, 102, 255)',
+
+            'rgb(201, 203, 207)'
+
+            ],
+
+            borderWidth: 1
+
+        }]
+
+    };
+
+     const config = {
+
+        type: 'bar',
+
+        data: data,
+
+        options: {
+
+        scales: {
+
+            y: {
+
+            beginAtZero: true
+
+            }
+
+        }
+
+        },
+
+    };
+
+    const stackedBar = new Chart(document.getElementById('BarChart'), config);
+*/
+</script>
 </body>
 </html>

@@ -206,46 +206,8 @@ login_form.addEventListener('submit', async (e) => {
     });
 });
 
-
-    </script>
-
     
-
-<!--script para el login-
-<script>
-
-    const url2 = 'http://localhost:3000/api/student'; // Reemplaza con la URL correcta de tu API de inicio de sesión
-
-    const loginForm = document.querySelector('.login-form')  
-    const emailInput = document.getElementById('login-email');
-    const passwordInput = document.getElementById('login-password');
-
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const stud_email = emailInput.value;
-        const stud_password = passwordInput.value;
-
-        try {
-            // Realiza una solicitud a tu API para verificar las credenciales
-            const response = await axios.post(url2, { stud_email, stud_password });
-
-            if (response.status === 200) {
-                // Si las credenciales son válidas, puedes redirigir al usuario o realizar acciones necesarias
-                console.log('Inicio de sesión exitoso');
-                // Redirigir al usuario a la página de inicio, por ejemplo.
-            } else {
-                // Si las credenciales no son válidas, muestra un mensaje de error
-                console.error('Credenciales incorrectas');
-            }
-        } catch (error) {
-            // Si hay un error en la solicitud, muestra un mensaje de error
-            console.error('Error en la solicitud', error);
-        }
-    });
-
     </script>
--->
 
 </body>
 </html>
