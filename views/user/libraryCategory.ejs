@@ -14,37 +14,44 @@
      <header class="header">
       <nav class="nav-header">
           <!-- Logo del Laboratorio de Innovación Social -->
-          <a href="/" class="header-logo">
+          <a href="/library" class="header-logo">
               <img  src="resources/assets/logo-ue.svg" alt="logo" class="header-icon">
           </a>
-          <a href="#">
-          <img  src="resources/assets/iconfinder_user_circle_duotone_9022927.svg" alt="logo" class="avatar-icon">
-        </a>
-
-          </div>
-      </nav>
-       <!--<div class="dropdown">
-              <div class="dropdown-trigger">
-                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu3">
-                  <span>Click me</span>
-                  <span class="icon is-small">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu3" role="menu">
-                <div class="dropdown-content">
-                  <a href="#" class="dropdown-item">
-                    Nombre
-                  <a href="#" class="dropdown-item">
-                    Editar perfil
-                  </a>
-                  <a href="#" class="dropdown-item">
-                    Cerrar sesión
-                  </a>
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+          </head>
+          <body>
+            <div class="containers">
+              <div class="dropdown is-trigger">
+                <div class="dropdown-trigger">
+                  <button class="button is-white" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <div class="media">
+                      <div class="media-left">
+                        <figure class="image is-64x64">
+                          <img src="resources/assets/iconfinder_user_circle_duotone_9022927.svg" alt="logo" class="avatar-icon">
+                        </figure>
+                      </div>
+                      <div class="media-content">
+                        <span class="icon is-small">
+                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                  <div class="dropdown-content">
+                    <a href="/adminProfile" class="dropdown-item">Ir al perfil</a>
+                    <a href="/indexAdmin" class="dropdown-item">Opciones de administrador</a>
+                    <a href="/" class="dropdown-item">Cerrar sesión</a>
+                  </div>
                 </div>
               </div>
-            </div>-->
+            </div>
+            
+      </nav>
   </header><br><br><br><br><br>
 
 
@@ -145,5 +152,8 @@
 
         </div>
     </main>        <br><br>
+
+    <script src="resources/scripts/iconMenu.js"></script>
+
 </body>
 </html>

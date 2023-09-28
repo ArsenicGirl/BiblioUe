@@ -23,11 +23,40 @@
             <a href="/indexAdmin" class="header-logo">
                 <img  src="resources/assets/logo-ue.svg" alt="logo" class="header-icon">
             </a>
-            <a href="#">
-            <img  src="resources/assets/iconfinder_user_circle_duotone_9022927.svg" alt="logo" class="avatar-icon">
-          </a>
-
-            </div>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+            </head>
+            <body>
+              <div class="containers">
+                <div class="dropdown is-trigger">
+                  <div class="dropdown-trigger">
+                    <button class="button is-white" aria-haspopup="true" aria-controls="dropdown-menu">
+                      <div class="media">
+                        <div class="media-left">
+                          <figure class="image is-64x64">
+                            <img src="resources/assets/iconfinder_user_circle_duotone_9022927.svg" alt="logo" class="avatar-icon">
+                          </figure>
+                        </div>
+                        <div class="media-content">
+                          <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      <a href="/adminProfile" class="dropdown-item">Ir al perfil</a>
+                      <a href="/indexAdmin" class="dropdown-item">Opciones de administrador</a>
+                      <a href="/" class="dropdown-item">Cerrar sesión</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
         </nav>
     </header><br><br><br><br><br>
 
@@ -105,11 +134,108 @@
     </div>
     </div>
     <canvas id="BarChart" width="4" height="1" aria-label="chart" role="img"></canvas>
-
+<script src="resources/scripts/iconMenu.js"></script>
 
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
+class Libreria {
+  constructor() {
+    this.url = 'http://localhost:3000/api/book';
+    this.contenedor = document.querySelector('tbody');
+    this.results = '';
+    this.formArticulos = document.querySelector('form');
+    this.book_title = document.getElementById('titulo');
+    this.book_author = document.getElementById('autor');
+    this.book_category = document.getElementById('categoria');
+    this.book_publishYear = document.getElementById('fecha');
+    this.book_description = document.getElementById('desc');
+    this.opcion = '';
 
+    this.formArticulos.addEventListener('submit', this.onSubmit.bind(this));
+    this.fetchAndDisplayBooks();
+  }
+
+  async save(data) {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: this.url,
+        data: data
+      });
+      console.log(response);
+      this.mostrarAlerta("Libro registrado satisfactoriamente", "is-success");
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  async onSubmit(e) {
+    e.preventDefault();
+    const data = {
+      book_title: this.book_title.value,
+      book_description: this.book_description.value,
+      book_author: this.book_author.value,
+      book_publishYear: parseInt(this.book_publishYear.value),
+      cate_id: parseInt(this.book_category.value)
+    };
+
+    console.log(data);
+    await this.save(data);
+    this.formArticulos.reset();
+    this.opcion = this.cleanForm(document.getElementById("addBook_form").reset());
+  }
+
+  mostrarAlerta(mensaje, estilo) {
+    const div = document.createElement("div");
+    div.className = `notification ${estilo}`;
+    div.appendChild(document.createTextNode(mensaje));
+
+    this.formArticulos.parentNode.insertBefore(div, this.formArticulos);
+
+    setTimeout(() => {
+      div.remove();
+    }, 3000);
+  }
+
+  async fetchAndDisplayBooks() {
+    try {
+      const response = await fetch(this.url);
+      const data = await response.json();
+      this.mostrar(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  mostrar(books) {
+    books.forEach((book) => {
+      this.results += `
+        <tr>
+          <td>${book.book_id}</td>
+          <td>${book.book_title}</td>
+          <td>${book.book_author}</td>
+          <td>${book.book_category}</td>
+          <td>${book.book_publishYear}</td>
+          <td>${book.book_description}</td>
+          <td class="text-center">
+            <a class="btn-edit button is-success is-light">Editar</a>
+            <a class="btn-delete button is-danger is-light">Eliminar</a>
+          </td>
+        </tr>
+      `;
+    });
+    this.contenedor.innerHTML = this.results;
+  }
+
+  cleanForm(form) {
+    // Implementa tu lógica para limpiar el formulario si es necesario
+  }
+}
+
+// Instanciar la clase Libreria
+const libreria = new Libreria();
+
+/*
 const url ='http://localhost:3000/api/book';
 const contenedor = document.querySelector ('tbody');
 let results = '';
@@ -273,6 +399,83 @@ on(document, 'click', '.btn-delete', (e, target) => {
   );
 });*/
   
+
+const url2 ='http://localhost:3000/api/book'
+    fetch(url2)
+  .then(response => response.json())
+  .then(data => mostrar(data))
+  .catch(error => console.log(error));
+
+const on = (element, event, selector, handler) => {
+  element.addEventListener(event, e => {
+    if (e.target.closest(selector)) {
+      handler(e);
+    }
+  });
+};
+
+on(document, 'click', '.btn-delete', e => {
+  const target = e.target;
+  const fila = target.parentNode.parentNode;
+  const id = fila.firstElementChild.innerHTML;
+  alertify.confirm('Confirm Message',
+    function () {
+      fetch(url2 + id, {
+        method: 'DELETE'
+      })
+        .then(res => {
+          if (res.ok) {
+            fila.remove(); // Elimina la fila de la tabla en la interfaz de usuario
+          } else {
+            console.error('Error al eliminar:', res.status, res.statusText);
+          }
+        })
+        .catch(error => {
+          console.error('Error al eliminar:', error);
+        });
+    },
+    function () {
+      alertify.error('Cancel');
+    });
+});
+
+
+    /*
+axios.get(url)
+  .then(response => {
+    const data = response.data;
+    mostrar(data);
+  })
+  .catch(error => console.log(error));
+
+const on = (element, event, selector, handler) => {
+  element.addEventListener(event, e => {
+    const target = e.target.closest(selector);
+    if (target) {
+      handler(e, target);
+    }
+  });
+};
+
+on(document, 'click', '.btn-delete', (e, target) => {
+  const fila = target.parentNode.parentNode;
+  const id = fila.firstElementChild.innerHTML;
+ alertify.confirm('Confirm Message', 
+  function() { 
+      axios.delete(url + id)
+        .then(() => {
+          // Eliminación exitosa
+          fila.remove(); // Elimina la fila de la tabla en la interfaz de usuario
+        })
+        .catch(error => {
+          console.error('Error al eliminar:', error);
+        });
+    },
+    function() { 
+      alertify.success('Cancel');
+    }
+  );
+});*/
     </script>
 
 <!--grafica-->
@@ -332,89 +535,6 @@ const ejecutar = (data) => {
 }
 
 
-/*
-    'use strict'
-
-    const labels = ['2017','2018','2019','2020','2021','2022','2023'];
-
-    console.log(document.getElementById('BarChart'))
-
-    const data = {
-
-        labels: labels,
-
-        datasets: [{
-
-            label: 'Tasa de mortalidad por suicidios anuales',
-
-            data: [100000, 20000, 500000, 80000, 5600, 55000, 400000],
-
-            backgroundColor: [
-
-            'rgba(255, 99, 132, 0.2)',
-
-            'rgba(255, 159, 64, 0.2)',
-
-            'rgba(255, 205, 86, 0.2)',
-
-            'rgba(75, 192, 192, 0.2)',
-
-            'rgba(54, 162, 235, 0.2)',
-
-            'rgba(153, 102, 255, 0.2)',
-
-            'rgba(201, 203, 207, 0.2)'
-
-            ],
-
-            borderColor: [
-
-            'rgb(255, 99, 132)',
-
-            'rgb(255, 159, 64)',
-
-            'rgb(255, 205, 86)',
-
-            'rgb(75, 192, 192)',
-
-            'rgb(54, 162, 235)',
-
-            'rgb(153, 102, 255)',
-
-            'rgb(201, 203, 207)'
-
-            ],
-
-            borderWidth: 1
-
-        }]
-
-    };
-
-     const config = {
-
-        type: 'bar',
-
-        data: data,
-
-        options: {
-
-        scales: {
-
-            y: {
-
-            beginAtZero: true
-
-            }
-
-        }
-
-        },
-
-    };
-
-    const stackedBar = new Chart(document.getElementById('BarChart'), config);
-*/
 </script>
 </body>
 </html>
