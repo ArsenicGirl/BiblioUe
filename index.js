@@ -65,11 +65,20 @@ app.get("/", function(req,res){
 
 //**USERS**
 app.get("/library", function(req, res) {
-    res.render(__dirname + '/views/user/library.ejs'); 
+    res.render(__dirname + '/views/user/libraryCategory.ejs'); 
 });
 
 app.get("/studentProfile", function(req,res){
     res.render(__dirname + '/views/user/userProfile.ejs')
+})
+app.get("/libro1", function(req,res){
+    res.render(__dirname + '/views/user/libro1.ejs')
+})
+app.get("/libro2", function(req,res){
+    res.render(__dirname + '/views/user/libro2.ejs')
+})
+app.get("/libro3", function(req,res){
+    res.render(__dirname + '/views/user/libro3.ejs')
 })
 
 //**ADMIN** 
@@ -82,6 +91,9 @@ app.get("/indexAdmin", function(req,res){
 app.get("/studentList", function(req,res){
     res.render(__dirname + '/views/admin/studentsList.ejs')
 })
+app.get("/adminProfile", function(req,res){
+    res.render(__dirname + '/views/admin/adminProfile.ejs')
+})
 
 
 
@@ -93,21 +105,25 @@ app.set("view engine", "ejs");
 //autenticacion login
 
 app.post('/auth', async (req, res) => {
-    const loginEmail = req.body.loginEmail;
-    const loginPassword = req.body.loginPassword;
+    const loginEmail = req.body.stud_email;
+    const loginPassword = req.body.stud_password;
 
     if (loginEmail && loginPassword) {
         connection.query('SELECT * FROM student WHERE stud_email = ?', [loginEmail], async (error, results) => {
             if (error) {
                 console.error('Error en la consulta SQL:', error);
-                res.status(500).json({ message: 'Error interno del servidor' });
+                res.status(500).json({ message: 'Error interno del servidor' + results});
             } else if (results.length === 0) {  
-                res.status(401).json({ message: 'Correo electrónico incorrecto' });
+                res.status(401).json({ message: 'El Correo electrónico no ha sido registrado' });
             } else {
-                const storedPassword = results[0].loginPassword;
-
+                if(results[0].stud_email == loginEmail && results[0].stud_password == loginPassword){
+                    res.status(200).json({ message: 'confirmacion :D'});
+                }
+                else{
+                    res.status(500)//.json({ message: 'Contraseña o Correo incorrecto' });
+                }
                 // Utiliza bcryptjs.compare para comparar la contraseña proporcionada con el hash almacenado
-                bcryptjs.compare(loginPassword, storedPassword, async (err, passwordMatch) => {
+            /*    bcryptjs.compare(loginPassword, storedPassword, async (err, passwordMatch) => {
                     if (err) {
                         console.error('Error al comparar contraseñas:', err);
                         res.status(500).json({ message: 'Error interno del servidor' });
@@ -117,7 +133,7 @@ app.post('/auth', async (req, res) => {
                     } else {
                         res.status(401).json({ message: 'Contraseña incorrecta' });
                     }
-                });
+                });*/
             }
         });
     } else {

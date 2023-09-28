@@ -150,31 +150,61 @@
 
 
 //login
-const url2 = 'http://localhost:3000/auth'; // Cambia la URL a la de tu API de inicio de sesión
-    const loginEmail = document.getElementById('loginEmail');
-    const loginPassword = document.getElementById('loginPassword');
+const url2 = 'http://localhost:3000/auth'; 
+const loginEmail = document.getElementById('loginEmail');
+const loginPassword = document.getElementById('loginPassword');
 
-    const save2 = async (data) =>{
-    await axios({
-        method: 'post',
-        url: 'http://localhost:3000/api/student',
-        data: data
-    }).then(d=>{
-        console.log(d)
-    }).catch(e=>console.warn(e))
-    }
+// Función para mostrar una notificación
+const notificacion = (mensaje, estilo) => {
+    const div = document.createElement("div");
+    div.className = `notification is-${estilo}`;
+    div.appendChild(document.createTextNode(mensaje));
 
-    login_form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        let data = {
+    // Mostrar la notificación
+    const container = document.querySelector(".container");
+    const registerBooks = document.querySelector("#register-books");
+    container.insertBefore(div, registerBooks);
+
+    setTimeout(() => {
+        div.remove();
+    }, 3000); // La notificación desaparecerá después de 3 segundos
+};
+
+login_form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let data = {
         stud_email: loginEmail.value,
         stud_password: loginPassword.value  
     };
-    alert(':D');
 
+    // Registro de lo que se está enviando en la solicitud
+    console.log('Solicitud de inicio de sesión:', data);
     
-    });
+    // Realizar la solicitud de inicio de sesión
+    axios({
+        method: 'post',
+        url: url2,
+        data: data
+    })
+    .then(response => {
+        // Registro de la respuesta del servidor
+        console.log('Respuesta del servidor:', response);
 
+        if (response.status === 200) {
+            // Inicio de sesión exitoso, redirigir al usuario a /adminIndex
+             window.location.href = '/library';
+         
+        } else{
+            // Mostrar un mensaje de error
+            notificacion('Inicio de sesión fallido', 'danger');
+        }
+    })
+    .catch(error => {
+        // Registro de errores
+        console.error('Error en la solicitud:', error);
+        notificacion('El correo o contraseña es incorrecto', 'danger');
+    });
+});
 
 
     </script>
